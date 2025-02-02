@@ -1,17 +1,20 @@
-import styles from "./recipe.module.css";
+import styles from "./recipe.module.scss";
 import Tag from "../Tag/Tag";
+import cn from 'classnames';
 
 const Recipe = () => {
   return (
-    <div className="recipe">
-        <div className="recipe__img-wrapper">
-            <img className="recipe__img" src="" alt="" />
+    <div className={cn(styles["recipe"])}>
+        <div className={cn(styles["recipe__img-wrapper"])}>
+            <img className={cn(styles["recipe__img"])} src="https://media.dodostatic.net/image/r:584x584/11ef9c1daafcf3529a62947b9522a8fe.png" alt="" />
         </div>
-        <h3 className="recipe__title">Classic Margherita Pizza</h3>
-        <span className="recipe__raiting">raiting: 4.6</span>
-        <div className="recipe__tags-wrapper">
+        <div className={cn(styles["recipe__content"])}>
+        <h3 className={cn(styles["recipe__title"])}>Classic Margherita Pizza</h3>
+        <span className={cn(styles["recipe__raiting"])}>raiting: 4.6</span>
+        <div className={cn(styles["recipe__tags-wrapper"])}>
             <Tag text="Pizza"/>
             <Tag text="Italian"/>
+        </div>
         </div>
     </div>
   )

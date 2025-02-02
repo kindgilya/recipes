@@ -1,4 +1,5 @@
 import Recipe from "../Recipe/Recipe";
+import styles from "./recipieslist.module.scss";
 
 const RecepiesList = () => {
   return (

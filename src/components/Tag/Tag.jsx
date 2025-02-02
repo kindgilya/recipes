@@ -1,8 +1,9 @@
-import styles from "./tag.module.css";
+import styles from "./tag.module.scss";
+import cn from 'classnames';
 
 const Tag = ({text}) => {
   return (
-    <span className="tag">{text}</span>
+    <span className={cn(styles["tag"])}>{text}</span>
   )
 }
 
