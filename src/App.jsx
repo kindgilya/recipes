@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import RecepiesList from './components/RecipiesList/RecepiesList'
+import Tabs from './components/Tabs/Tabs';
 
 function App() {
   const [recipes, setRecipes] = useState(null);
@@ -10,6 +11,7 @@ function App() {
   }, [])
   
   return <div className='container'>
+    <Tabs></Tabs>
     <RecepiesList recipes={recipes}/>
   </div>
 }

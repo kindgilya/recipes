@@ -4,7 +4,7 @@ import cn from 'classnames';
 
 const Tab = ({text, active}) => {
   return (
-    <span className={cn(styles["tab"], active ? styles["tab--active"] : "")}>Steps</span>
+    <span className={cn(styles["tab"], active ? styles["tab--active"] : "")}>{text}</span>
   )
 }
 
