@@ -9,7 +9,7 @@ function App() {
     fetch('https://dummyjson.com/recipes').then((response) => response.json()).then((data) => setRecipes(data))
   }, [])
   
-  return <div>
+  return <div className='container'>
     <RecepiesList recipes={recipes}/>
   </div>
 }
