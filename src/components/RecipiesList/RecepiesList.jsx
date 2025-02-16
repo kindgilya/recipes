@@ -7,7 +7,8 @@ const RecepiesList = ({recipes}) => {
     <div className={cn(styles['recepies-list'])}>
         {
           recipes !== null ? recipes.recipes.map((el) => {
-            return <Recipe id={el.id} name={el.name} rating={el.rating} tags={el.tags} image={el.image}/>
+            console.log(el);
+            return <Recipe id={el.id} name={el.name} rating={el.rating} tags={el.tags} image={el.image} ingredients={el.ingredients} instructions={el.instructions}/>
            }) : 'recepies empty'
         }
     </div>
