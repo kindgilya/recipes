@@ -1,12 +1,23 @@
 .tabs{
-
     &__control{
         margin-bottom: 10px;
         display: flex;
         gap: 5px;
     }
 
+    &__control-item {
+        padding: 5px 0;
+        cursor: pointer;
+
+    &--active{
+        border-bottom: 2px solid #40dda6;
+    }
+    
+    }
+
     &__content{
 
     }
+
 }
+

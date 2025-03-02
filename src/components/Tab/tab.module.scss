@@ -1,9 +1,12 @@
-.tab{
-    padding: 5px 0;
-    cursor: pointer;
+.tab {
+    visibility: hidden;
+    opacity: 0;
+    height: 0px;
+		transition: opacity .7s;
 
-    
-	&--active{
-        border-bottom: 2px solid #40dda6;
+    &--active {
+        visibility: visible;
+        opacity: 1;
+        height: auto;
     }
 }

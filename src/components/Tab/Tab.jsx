@@ -2,9 +2,11 @@ import React from 'react';
 import styles from "./tab.module.scss";
 import cn from 'classnames';
 
-const Tab = ({text, active, handler}) => {
+const Tab = ({children, active}) => {
   return (
-    <span className={cn(styles["tab"], active ? styles["tab--active"] : "")} onClick={handler}>{text}</span>
+    <div className={cn(styles["tab"], active ? styles["tab--active"] : "")}>
+      {children}
+    </div>
   )
 }
 

@@ -2,6 +2,9 @@ import styles from "./recipe.module.scss";
 import Tag from "../Tag/Tag";
 import cn from 'classnames';
 import Tabs from "../Tabs/Tabs";
+import Tab from "../Tab/Tab";
+import ListGroup from "../ListGroup/ListGroup";
+import ListGroupItem from "../ListGroupItem/ListGroupItem";
 
 const Recipe = ({id,name,rating,tags,image,ingredients,instructions}) => {
   return (
@@ -12,11 +15,22 @@ const Recipe = ({id,name,rating,tags,image,ingredients,instructions}) => {
         <div className={cn(styles["recipe__content"])}>
         <h3 className={cn(styles["recipe__title"])}>{name}</h3>
         <span className={cn(styles["recipe__raiting"])}>raiting: {rating}</span>
-        <Tabs ingredients={ingredients} instructions={instructions}/>
+        <Tabs>
+            <Tab title="Steps">
+                <ListGroup use="ul">
+                {instructions.map((text,i) => <ListGroupItem key={i}>{text}</ListGroupItem>)}
+                </ListGroup>
+            </Tab>
+            <Tab title="Ingredients">
+            <ListGroup use="ul">
+                {ingredients.map((text,i) => <ListGroupItem key={i}>{text}</ListGroupItem>)}
+            </ListGroup>
+            </Tab>
+        </Tabs>
         <div className={cn(styles["recipe__tags-wrapper"])}>
             {
-                tags.map((el) => {
-                    return <Tag text={el}/>
+                tags.map((el,i) => {
+                    return <Tag text={el} key={i}/>
                 })
             }
             {/* <Tag text="Pizza"/>

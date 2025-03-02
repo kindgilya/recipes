@@ -1,32 +1,51 @@
 import React, { useState } from 'react';
 import styles from "./tabs.module.scss";
 import cn from 'classnames';
-import Tab from '../Tab/Tab';
-import TabContent from '../TabContent/TabContent';
-import ListGroup from '../ListGroup/ListGroup';
-import ListGroupItem from '../ListGroupItem/ListGroupItem';
 
-const Tabs = ({ingredients,instructions}) => {
-    const [isActive, setIsActive] = useState(1);
-    
+/* 
+
+react 2 типа компоненетов
+(mini ui kit)
+- ui
+  input
+  button
+  tabs
+  ListGroup
+  ListGroupItem
+
+- конкретные компоненты под проект (под бизнес логику)
+  RecipiesList
+  Recipe
+
+*/
+
+const Tabs = ({children, startActive = 0}) => {
+  const [isActive, setIsActive] = useState(startActive);
+
+  const newChildren = children.map((el, i) => {
+    return {
+      ...el,
+      props: {
+        ...el.props,
+        active: i === isActive ? true : false
+      }
+    }
+  });
+
   return (
     <div className={cn(styles['tabs'])}>
         <div className={cn(styles["tabs__control"])}>
-            <Tab text="Steps" active={isActive === 1} handler={() => setIsActive(1)}/>
-            <Tab text="Ingridients" active={isActive === 2} handler={() => setIsActive(2)}/>
+          {
+            children.map((el,i) => {
+              return <span className={cn(styles["tabs__control-item"], i === isActive ? styles["tabs__control-item--active"] : "")} key={i} onClick={() => setIsActive(i)}>{el.props.title}</span>
+            })
+          }
         </div>
 		<div className={cn(styles["tabs__content"])}>
-            <TabContent active={isActive === 1} >
-              <ListGroup use="ul">
-							{ingredients.map((text) => {
-                return <ListGroupItem>{text}</ListGroupItem>
-              })}
-              </ListGroup>
-						</TabContent>
-            <TabContent active={isActive === 2} >
-							{instructions}
-						</TabContent>
-        </div>
+      {
+        newChildren
+      }
+    </div>
     </div>
   )
 }
