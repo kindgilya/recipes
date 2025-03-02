@@ -5,6 +5,7 @@ import Tabs from "../Tabs/Tabs";
 import Tab from "../Tab/Tab";
 import ListGroup from "../ListGroup/ListGroup";
 import ListGroupItem from "../ListGroupItem/ListGroupItem";
+import Collaps from "../Collaps/Collaps";
 
 const Recipe = ({id,name,rating,tags,image,ingredients,instructions}) => {
   return (
@@ -22,9 +23,11 @@ const Recipe = ({id,name,rating,tags,image,ingredients,instructions}) => {
                 </ListGroup>
             </Tab>
             <Tab title="Ingredients">
+                <Collaps maxHeight={100}>
             <ListGroup use="ul">
                 {ingredients.map((text,i) => <ListGroupItem key={i}>{text}</ListGroupItem>)}
-            </ListGroup>
+            </ListGroup>   
+                </Collaps>
             </Tab>
         </Tabs>
         <div className={cn(styles["recipe__tags-wrapper"])}>

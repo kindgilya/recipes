@@ -1,0 +1,8 @@
+.collaps {
+    width: 100%;
+    overflow: hidden;
+
+    &--active {
+        overflow: visible;
+    }
+}
