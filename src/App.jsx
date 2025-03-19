@@ -15,14 +15,3 @@ function App() {
 }
 
 export default App
-
-/* 
-
-create git rep -> commits
-
-folder components
-
-scss
-classnames (module)
-
-*/
