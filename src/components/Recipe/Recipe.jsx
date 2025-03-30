@@ -8,13 +8,13 @@ import ListGroupItem from "../ListGroupItem/ListGroupItem";
 import Collaps from "../Collaps/Collaps";
 import { useState } from "react";
 
-const Recipe = ({id,name,rating,tags,image,ingredients,instructions}) => {
+const Recipe = ({id,name,rating,tags,image,ingredients,instructions,handler}) => {
     const [isActiveIngredientsList, setIsActiveIngredientsList] = useState(false);
     const [isActiveStepsList, setIsActiveStepsList] = useState(false);
   return (
     <div className={cn(styles["recipe"])}>
         <div className={cn(styles["recipe__img-wrapper"])}>
-            <img className={cn(styles["recipe__img"])} src={image} alt="" />
+            <img className={cn(styles["recipe__img"])} src={image} alt=""  onClick={() => {handler(image);}}/>
         </div>
         <div className={cn(styles["recipe__content"])}>
         <h3 className={cn(styles["recipe__title"])}>{name}</h3>

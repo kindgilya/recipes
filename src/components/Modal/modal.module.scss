@@ -8,6 +8,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.3s ease;
 
     &__wrapper {
         position: relative;
@@ -15,14 +18,21 @@
 		height: auto;
     }
 
-    &__content {
-        background-color: #fff;
+    &__content img {
+        // background-color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
     }
 
     &__btn {
         position: absolute;
         top: -30px;
         right: -10px;
-				color: #fff;
+		color: #fff;
+    }
+
+    &--active {
+        visibility: visible;
+        opacity: 1;
     }
 }
