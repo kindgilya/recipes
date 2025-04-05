@@ -5,8 +5,7 @@ import Button from '../Button/Button';
 import { IoClose } from "react-icons/io5";
 
 const Modal = ({children, onClose, isOpen = false}) => {
-    console.log(isOpen);
-
+  
     useEffect(() => {
         const handleKeyPress = (e) => {
           if (e.key === 'Escape' && isOpen) {

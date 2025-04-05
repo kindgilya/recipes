@@ -1,8 +1,10 @@
 .recepies-list{
+    
+    &__main{
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    
+    margin-bottom: 20px;
     @media (max-width: 900px) {
         > * {
             flex: 1 1 calc(33.333% - 10px);
@@ -14,4 +16,11 @@
             flex: 1 1 calc(50% - 10px);
         }
     }
+    }
+
+    &__btn-show-more{
+        display: flex;
+        justify-content: center;
+    }
+
 }

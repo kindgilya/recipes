@@ -4,8 +4,9 @@ import Recipe from "../Recipe/Recipe";
 import styles from "./recipieslist.module.scss";
 import cn from 'classnames';
 import { useState } from "react";
+import Button from "../Button/Button";
 
-const RecepiesList = ({recipes}) => {
+const RecepiesList = ({recipes, skipHandler, countLoadedRecipes}) => {
   const [activeModalImage, setActiveModalImage] = useState('');
 
   const handleImageClick = (img) => {
@@ -18,11 +19,18 @@ const RecepiesList = ({recipes}) => {
 
   return (
     <div className={cn(styles['recepies-list'])}>
+      <div className={cn(styles["recepies-list__main"])}>
         {
-          recipes !== null ? recipes.recipes.map((el) => {
+          recipes.length > 0 ? recipes.map((el) => {
             return <Recipe id={el.id} key={el.id} name={el.name} rating={el.rating} tags={el.tags} image={el.image} ingredients={el.ingredients} instructions={el.instructions} handler={handleImageClick}/>
            }) : 'recepies empty'
         }
+      </div>
+        <div className={cn(styles["recepies-list__btn-show-more"])}>
+          <Button use={'primary'} handler={skipHandler}>
+            loaded({countLoadedRecipes}), show more
+          </Button>
+        </div>
         <div className="recepies-list__modal">
           {createPortal(<Modal onClose={closeModal}  isOpen={activeModalImage != '' ? true : false}>
             <img src={activeModalImage}/>
