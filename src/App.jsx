@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import RecepiesList from './components/RecipiesList/RecepiesList'
+import Header from './components/Header/Header';
 
 function App() {
   const [recipes, setRecipes] = useState([]);
@@ -16,9 +17,25 @@ function App() {
     setSkip(skip + 10);
   }
   
-  return <div className='container'>
+  return <>
+  <Header></Header>
+  <div className='container'>
     <RecepiesList recipes={recipes} skipHandler={skipHandler} countLoadedRecipes={recipes.length}/>
   </div>
+  </>
 }
 
 export default App
+
+/* 
+
+ДЗ:
+
+1. когда жмем на кнопку показаь еще, у нас срабатывает skipHandler + 10, нужно написать логику по блокровке смены состояния setSkip
+ (взять тотал рецептов (он есть в ответе сервера)) (подумать где хранить тотал useRef) useRef() -> {current: 50}
+2. сделать компонент лоадер(крутилка)
+3. использовать лоадер в кнопке показать еще в момент загрузки
+(надо понимать статус загрузки (добавить состояние статус загрузки (загружаю, не загружаю)))
+
+
+*/
