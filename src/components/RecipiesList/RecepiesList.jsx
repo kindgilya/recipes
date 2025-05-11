@@ -5,8 +5,9 @@ import styles from "./recipieslist.module.scss";
 import cn from 'classnames';
 import { useState } from "react";
 import Button from "../Button/Button";
+import Loader from "../Loader/Loader";
 
-const RecepiesList = ({recipes, skipHandler, countLoadedRecipes}) => {
+const RecepiesList = ({recipes, skipHandler, countLoadedRecipes, isLoading, totalRecipes}) => {
   const [activeModalImage, setActiveModalImage] = useState('');
 
   const handleImageClick = (img) => {
@@ -27,8 +28,12 @@ const RecepiesList = ({recipes, skipHandler, countLoadedRecipes}) => {
         }
       </div>
         <div className={cn(styles["recepies-list__btn-show-more"])}>
-          <Button use={'primary'} handler={skipHandler}>
-            loaded({countLoadedRecipes}), show more
+          <Button use={'primary'} handler={skipHandler}  disabled={isLoading}>
+          {isLoading ? (
+                <div style={{display: 'flex', gap: '10px'}}>load...<div style={{width: '15px', height: '15px'}}>{<Loader />}</div></div>
+              ) : (
+                `Loaded (${countLoadedRecipes}), show more`
+              ) }
           </Button>
         </div>
         <div className="recepies-list__modal">

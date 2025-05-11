@@ -1,15 +1,19 @@
 import React from 'react'
-import styles from "./filter.module.scss";
+import styles from "./form.module.scss";
 import cn from 'classnames';
 
 const Form = ({method='POST', action='#', reload, handler, children}) => {
 	const formHandler = (e) => {
-        if (reload !== undefined) {
+        if (reload === undefined) {
             e.preventDefault();
         }
 
 		const data = new FormData(e.target);
-		console.log(data);
+
+    for (let [key, value] of data) {
+  console.log(`${key} — ${value}`)
+}
+		// console.log(data.entries());
     }
 
   return (

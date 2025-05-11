@@ -6,7 +6,7 @@ import Input from '../Input/Input';
 const Search = ({setSearchText, searchText}) => {
   return (
     <div className='search'>
-        <Input type='text' placeholder='search title...' handler={setSearchText} searchText={searchText}/>
+        <Input type='text' placeholder='search title...' handler={setSearchText} searchText={searchText} name='search'/>
     </div>
   )
 }
