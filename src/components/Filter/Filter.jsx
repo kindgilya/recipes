@@ -1,30 +1,78 @@
-import React from 'react'
-import styles from "./filter.module.scss";
+import { useState } from 'react';
+import styles from './Filter.module.scss';
 import cn from 'classnames';
-import Form from '../Form/Form';
-import Input from '../Input/Input';
+import Button from '../Button/Button';
 
-const Filter = ({handler}) => {
-	const ratingHandler = (value) => {
-		console.log(value);
-	}
+const Filter = ({ handler, filters }) => {
+  const [isOpen, setIsOpen] = useState(false);
 
-	const servingsHandler = (value) => {
-		console.log(value);
-	}
+  const handleFilterChange = (type, value) => {
+    handler({ ...filters, [type]: value });
+  };
+
+  const toggleFilters = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
-    <div className='filter'>
-        <Form handler={handler}>
-            <Input type='range' handler={ratingHandler} value={5} name='raiting'/>
-            <Input type='number' handler={servingsHandler} value={2} name='servings'/>
-            <Input type='color' handler={servingsHandler} value={"#ff00ff"} name='color'/>
-            <Input type='date' handler={servingsHandler} value={"2025-05-12"} name='date'/>
-						<textarea name="message" placeholder='text...'></textarea>
-						<button type="submit">filter</button>
-        </Form>
-    </div>
-  )
-}
+    <div className={cn(styles.filter)}>
+      <Button 
+        use="primary" 
+        onClick={toggleFilters}
+        className={cn(styles['filter__toggle'])}
+      >
+        {isOpen ? 'Скрыть фильтры' : 'Показать фильтры'}
+        <span className={cn(
+          styles['filter__arrow'],
+          { [styles['filter__arrow--up']]: isOpen }
+        )} />
+      </Button>
 
-export default Filter
+      {isOpen && (
+        <div className={cn(styles['filter__content'])}>
+          <div className={cn(styles['filter__group'])}>
+            <label 
+              htmlFor="difficulty" 
+              className={cn(styles['filter__label'])}
+            >
+              Сложность:
+            </label>
+            <select
+              id="difficulty"
+              className={cn(styles['filter__select'])}
+              value={filters.difficulty}
+              onChange={(e) => handleFilterChange('difficulty', e.target.value)}
+            >
+              <option value="">Любая</option>
+              <option value="Easy">Легкая</option>
+              <option value="Medium">Средняя</option>
+              <option value="Hard">Сложная</option>
+            </select>
+          </div>
+
+          <div className={cn(styles['filter__group'])}>
+            <label 
+              htmlFor="cookingTime" 
+              className={cn(styles['filter__label'])}
+            >
+              Время приготовления:
+            </label>
+            <select
+              id="cookingTime"
+              className={cn(styles['filter__select'])}
+              value={filters.cookingTime}
+              onChange={(e) => handleFilterChange('cookingTime', e.target.value)}
+            >
+              <option value="">Любое</option>
+              <option value="0-30">До 30 минут</option>
+              <option value="30-60">30-60 минут</option>
+              <option value="60+">Более 60 минут</option>
+            </select>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Filter;

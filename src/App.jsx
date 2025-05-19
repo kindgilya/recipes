@@ -3,12 +3,14 @@ import './App.css'
 import RecepiesList from './components/RecipiesList/RecepiesList'
 import Header from './components/Header/Header';
 import Filter from './components/Filter/Filter';
+import Theme from './context/ThemeContext';
 
 function App() {
   const [recipes, setRecipes] = useState([]);
   const [skip, setSkip] = useState(0);
   const [searchText, setSearchText] = useState("");
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [filteredRecipes, setFilteredRecipes] = useState([]);
   const totalRecipes = useRef(0);
 
   useEffect(() => {
@@ -35,11 +37,15 @@ function App() {
     }
   }
 
+
   return (
-    <>
+    <Theme>
       <Header setSearchText={setSearchText} searchText={searchText} />
       <div className="container">
-        <Filter handler={() => console.log('Filter handler')} />
+       <Filter 
+        onFilterChange={()=>{}}
+        recipes={recipes}
+      />
       </div>
       <div className="container">
         <RecepiesList
@@ -50,7 +56,8 @@ function App() {
           totalRecipes={totalRecipes.current}
         />
       </div>
-    </>
+    </Theme>
+    
   )
 }
 
@@ -70,5 +77,6 @@ export default App
 6. стилизовать компоненты форм (инпут )
 7. стилизовать компонент поиск (можно добавить иконку слева от инпут)
 8. сделать фильтр выпадающим (будет кнопка показать скрыть фильтр (добавить стрелоку внутрь кнопки ))
+9. кнопка переключения темы, постилизовать списки (точки)
 
 */

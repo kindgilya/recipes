@@ -6,17 +6,22 @@ import Tab from "../Tab/Tab";
 import ListGroup from "../ListGroup/ListGroup";
 import ListGroupItem from "../ListGroupItem/ListGroupItem";
 import Collaps from "../Collaps/Collaps";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ThemeContext } from "../../context/ThemeContext";
+import ThemedTag from "../ThemedTag/ThemedTag";
 
 const Recipe = ({id,name,rating,tags,image,ingredients,instructions,handler}) => {
     const [isActiveIngredientsList, setIsActiveIngredientsList] = useState(false);
     const [isActiveStepsList, setIsActiveStepsList] = useState(false);
+    const {theme, themeToggle} = useContext(ThemeContext);
+
   return (
-    <div className={cn(styles["recipe"])}>
+    <div className={cn(styles["recipe"], theme === 'dark' && styles["recipe--dark"])}>
         <div className={cn(styles["recipe__img-wrapper"])}>
             <img className={cn(styles["recipe__img"])} src={image} alt=""  onClick={() => {handler(image);}}/>
         </div>
         <div className={cn(styles["recipe__content"])}>
+        <button onClick={themeToggle}>click {theme}</button>
         <h3 className={cn(styles["recipe__title"])}>{name}</h3>
         <span className={cn(styles["recipe__raiting"])}>raiting: {rating}</span>
         <Tabs>
@@ -42,7 +47,7 @@ const Recipe = ({id,name,rating,tags,image,ingredients,instructions,handler}) =>
         <div className={cn(styles["recipe__tags-wrapper"])}>
             {
                 tags.map((el,i) => {
-                    return <Tag text={el} key={i}/>
+                    return <ThemedTag key={i}>{el}</ThemedTag>
                 })
             }
             {/* <Tag text="Pizza"/>
