@@ -1,3 +1,23 @@
 .list-group{
     padding-left: 30px;
+    
+&-item {
+  position: relative;
+
+&::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #40dda6;
+    position: absolute;
+    left: -25px;
+    top: 5px;
+    transition: 0.3s;
+  }
+
+  &--dark::before {
+    background-color: #dd9e40;
+  }
+}
 }

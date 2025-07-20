@@ -5,12 +5,38 @@ import Header from './components/Header/Header';
 import Filter from './components/Filter/Filter';
 import Theme from './context/ThemeContext';
 
+function superFilterFunc(filteredData) {
+  return (item) => {
+    return Object.keys(filteredData).every((key) => {
+      if (!filteredData[key]) return true;
+      if (typeof filteredData[key] === "object" && filteredData[key] !== null && !Array.isArray(filteredData[key])) {
+        return filteredData[key].min <= item[key] && filteredData[key].max >= item[key];
+      }
+      if (Array.isArray(filteredData[key])) {
+        if (Array.isArray(item[key])) {
+          return item[key].some(val => filteredData[key].includes(val));
+        }
+        return filteredData[key].includes(item[key]);
+      }
+      return filteredData[key] === item[key];
+    });
+  };
+}
+
 function App() {
   const [recipes, setRecipes] = useState([]);
   const [skip, setSkip] = useState(0);
   const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
+  const [filters, setFilters] = useState({
+    difficulty: '',
+    cookingTime: '',
+    cuisine: '',
+    calories: { min: '', max: '' },
+    tags: [],
+    mealType: []
+  });
   const totalRecipes = useRef(0);
 
   useEffect(() => {
@@ -22,34 +48,65 @@ function App() {
         totalRecipes.current = data.total
       })
       .finally(() => setIsLoading(false))
-
       // destroy | перед вызовом следующей итерации useEffect
-      return () => {
-        // document.removeEventListener('click', func)
-        // clearTimeout(ref.current)
-        // clearInterval(ref.current)
-      }
+      return () => {}
   }, [skip])
-
+  
   const skipHandler = () => {
     if (skip + 10 < totalRecipes.current) {
       setSkip((prev) => prev + 10)
     }
   }
 
+   useEffect(() => {
+    let filterObj = {};
+    // difficulty
+    if (filters.difficulty) filterObj.difficulty = filters.difficulty;
+    // cuisine
+    if (filters.cuisine) filterObj.cuisine = filters.cuisine;
+    // calories
+    if (filters.calories.min || filters.calories.max) {
+      filterObj.caloriesPerServing = {
+        min: filters.calories.min ? Number(filters.calories.min) : 0,
+        max: filters.calories.max ? Number(filters.calories.max) : Infinity
+      };
+    }
+    // tags
+    if (filters.tags && filters.tags.length > 0) filterObj.tags = filters.tags;
+    // mealType
+    if (filters.mealType && filters.mealType.length > 0) filterObj.mealType = filters.mealType;
+    // cookingTime 
+    if (filters.cookingTime) {
+      let [min, max] = filters.cookingTime.split('-');
+      min = Number(min);
+      max = Number(max);
+      if (isNaN(max)) max = Infinity;
+      filterObj.totalTime = { min, max };
+    }
+
+    let result = recipes.map(r => ({ ...r, totalTime: r.prepTimeMinutes + r.cookTimeMinutes }));
+
+    if (searchText) {
+      result = result.filter(recipe =>
+        recipe.name.toLowerCase().includes(searchText.toLowerCase())
+      );
+    }
+
+    setFilteredRecipes(result.filter(superFilterFunc(filterObj)));
+  }, [recipes, searchText, filters]);
 
   return (
     <Theme>
       <Header setSearchText={setSearchText} searchText={searchText} />
       <div className="container">
        <Filter 
-        onFilterChange={()=>{}}
-        recipes={recipes}
+        onFilterChange={setFilters}
+        currentFilters={filters}
       />
       </div>
       <div className="container">
         <RecepiesList
-          recipes={recipes}
+          recipes={filteredRecipes}
           skipHandler={skipHandler}
           countLoadedRecipes={recipes.length}
           isLoading={isLoading}
@@ -57,26 +114,8 @@ function App() {
         />
       </div>
     </Theme>
-    
+
   )
 }
 
 export default App
-
-/* 
-
-ДЗ:
-
-1. когда жмем на кнопку показаь еще, у нас срабатывает skipHandler + 10, нужно написать логику по блокровке смены состояния setSkip
- (взять тотал рецептов (он есть в ответе сервера)) (подумать где хранить тотал useRef) useRef() -> {current: 50}
-2. сделать компонент лоадер(крутилка)
-3. использовать лоадер в кнопке показать еще в момент загрузки
-(надо понимать статус загрузки (добавить состояние статус загрузки (загружаю, не загружаю)))
-4. надо создать компонент логотип svg
-5. написать функцию для фильтрации recipes
-6. стилизовать компоненты форм (инпут )
-7. стилизовать компонент поиск (можно добавить иконку слева от инпут)
-8. сделать фильтр выпадающим (будет кнопка показать скрыть фильтр (добавить стрелоку внутрь кнопки ))
-9. кнопка переключения темы, постилизовать списки (точки)
-
-*/

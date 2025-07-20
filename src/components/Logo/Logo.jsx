@@ -1,7 +1,10 @@
+import React, { useContext } from 'react'
 import styles from './logo.module.scss';
 import cn from 'classnames';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const Logo = () => {
+  const { theme } = useContext(ThemeContext);
   return (
     <div className={cn(styles['logo'])}>
       <svg 
@@ -24,7 +27,7 @@ const Logo = () => {
           fill="#4CAF50"
         />
       </svg>
-      <span className={cn(styles['logo__text'])}>RecipeBook</span>
+      <span className={cn(styles['logo__text'], theme === 'dark' && styles['logo__text--dark'])}>RecipeBook</span>
     </div>
   );
 };

@@ -1,18 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styles from "./listgroup.module.scss";
 import cn from 'classnames';
+import { ThemeContext } from '../../context/ThemeContext';
 
-const ListGroup = ({use, children}) => {
-	const getTag = () => {
-		if (use === 'ul') {
-			return <ul className={cn(styles["list-group"])}>{children}</ul>
-		}
-        if (use === 'ol') {
-			return <ol className={cn(styles["list-group"])}>{children}</ol>
-		}
-	}
+const ListGroup = ({use = 'ul', children}) => {
+  const Tag = use === 'ol' ? 'ol' : 'ul';
+  return <Tag className={cn(styles["list-group"])}>{children}</Tag>;
+};
 
-  return (getTag())
-}
+const Item = ({children}) => {
+  const { theme } = useContext(ThemeContext);
+  return <li className={cn(styles['list-group-item'], theme === 'dark' && styles['list-group-item--dark'])}>{children}</li>;
+};
 
-export default ListGroup
+ListGroup.Item = Item;
+
+export default ListGroup;

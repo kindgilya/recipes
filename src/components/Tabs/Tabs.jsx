@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styles from "./tabs.module.scss";
 import cn from 'classnames';
+import { ThemeContext } from '../../context/ThemeContext';
 
 /* 
 
@@ -21,6 +22,7 @@ react 2 типа компоненетов
 
 const Tabs = ({children, startActive = 0}) => {
   const [isActive, setIsActive] = useState(startActive);
+  const { theme } = useContext(ThemeContext);
 
   const newChildren = children.map((el, i) => {
     return {
@@ -34,10 +36,19 @@ const Tabs = ({children, startActive = 0}) => {
 
   return (
     <div className={cn(styles['tabs'])}>
-        <div className={cn(styles["tabs__control"])}>
+        <div className={cn(styles["tabs__control"]) }>
           {
             children.map((el,i) => {
-              return <span className={cn(styles["tabs__control-item"], i === isActive ? styles["tabs__control-item--active"] : "")} key={i} onClick={() => setIsActive(i)}>{el.props.title}</span>
+              return <span
+                className={cn(
+                  styles["tabs__control-item"],
+                  i === isActive && (theme === 'light' ? styles["tabs__control-item--active"] : styles["tabs__control-item--active-dark"])
+                )}
+                key={i}
+                onClick={() => setIsActive(i)}
+              >
+                {el.props.title}
+              </span>
             })
           }
         </div>
