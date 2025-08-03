@@ -12,7 +12,7 @@ import ThemedTag from "../ThemedTag/ThemedTag";
 const Recipe = ({id,name,rating,tags,image,ingredients,instructions,handler}) => {
     const [isActiveIngredientsList, setIsActiveIngredientsList] = useState(false);
     const [isActiveStepsList, setIsActiveStepsList] = useState(false);
-    const {theme} = useContext(ThemeContext);
+    const theme = useContext(ThemeContext);
 
     const getRandomId = () => Math.random().toString(36).substring(2, 6);
 

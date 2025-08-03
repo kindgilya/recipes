@@ -8,7 +8,7 @@ import { ThemeContext } from '../../context/ThemeContext';
 
 
 const Header = ({setSearchText, searchText}) => {
-  const { theme } = useContext(ThemeContext);
+  const theme = useContext(ThemeContext);
   return (
     <header className={cn(styles['header'], theme === 'dark' && styles['header--dark'])}>
       <div className={cn(styles['header__container'], theme === 'dark' && styles['header__container--dark'])}>

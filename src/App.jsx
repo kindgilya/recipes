@@ -95,6 +95,7 @@ function App() {
     setFilteredRecipes(result.filter(superFilterFunc(filterObj)));
   }, [recipes, searchText, filters]);
 
+
   return (
     <Theme>
       <Header setSearchText={setSearchText} searchText={searchText} />

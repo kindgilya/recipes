@@ -1,27 +1,21 @@
 import { createContext, useCallback, useState } from "react";
 
 export const ThemeContext = createContext('light');
+export const ThemeContextToggle = createContext(() => {});
 
 const Theme = ({children}) => {
 	const [theme, setTheme] = useState('light');
 
-  const themeToggle = () => {
-        if (theme === 'light') {
-            setTheme('dark')
-        }
-        
-        if (theme === 'dark') {
-            setTheme('light')
-        } 
-  }
-  
-  // const themeToggle = useCallback(() => themeToggleNoStab(theme), [])
+  const themeToggle = useCallback(() => {
+    setTheme((prevTheme) => prevTheme === 'light' ? 'dark' : 'light')
+  }, [])
 
-  
 	return (
-    <ThemeContext.Provider value={{theme, themeToggle}}>
+    <ThemeContextToggle.Provider value={themeToggle}>
+    <ThemeContext.Provider value={theme}>
     {children}
     </ThemeContext.Provider>
+    </ThemeContextToggle.Provider>
   )
 }
 

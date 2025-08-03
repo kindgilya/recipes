@@ -2,13 +2,11 @@ import React, { useContext } from 'react'
 import styles from "./toggleTheme.module.scss";
 import cn from 'classnames';
 import Button from '../Button/Button';
-import { ThemeContext } from '../../context/ThemeContext';
+import { ThemeContextToggle,ThemeContext } from '../../context/ThemeContext';
 
 const ToggleTheme = () => {
-  const {theme, themeToggle} = useContext(ThemeContext);
-
-	console.log('rerender :(');
-		
+  const themeToggle  = useContext(ThemeContextToggle);
+  const theme  = useContext(ThemeContext);
   return (
     <div className={styles['toggle-theme']} onClick={themeToggle}>
       <div className={styles['toggle-theme__track']}>
@@ -18,4 +16,4 @@ const ToggleTheme = () => {
   )
 }
 
-export default ToggleTheme
+export default React.memo(ToggleTheme);
