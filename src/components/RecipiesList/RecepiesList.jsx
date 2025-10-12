@@ -56,9 +56,9 @@ const RecepiesList = ({
         <Button
           use={theme === "dark" ? "loaded-dark" : "loaded"}
           handler={skipHandler}
-          disabled={isLoading}
+          disabled={isLoading === "loading"}
         >
-          {isLoading ? (
+          {isLoading === "loading" ? (
             <div style={{ display: "flex", gap: "10px" }}>
               load...
               <div style={{ width: "15px", height: "15px" }}>{<Loader />}</div>

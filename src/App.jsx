@@ -1,20 +1,34 @@
-import { useEffect, useState, useRef } from 'react'
-import './App.css'
-import RecepiesList from './components/RecipiesList/RecepiesList'
-import Header from './components/Header/Header';
-import Filter from './components/Filter/Filter';
-import Theme from './context/ThemeContext';
+import { useEffect, useState, useRef } from "react";
+import "./App.css";
+import RecepiesList from "./components/RecipiesList/RecepiesList";
+import Header from "./components/Header/Header";
+import Filter from "./components/Filter/Filter";
+import Theme from "./context/ThemeContext";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchRecipes,
+  selectRecipes,
+  selectRecipesStatus,
+  selectTotalRecipes,
+} from "./feachers/recipesSlice";
 
 function superFilterFunc(filteredData) {
   return (item) => {
     return Object.keys(filteredData).every((key) => {
       if (!filteredData[key]) return true;
-      if (typeof filteredData[key] === "object" && filteredData[key] !== null && !Array.isArray(filteredData[key])) {
-        return filteredData[key].min <= item[key] && filteredData[key].max >= item[key];
+      if (
+        typeof filteredData[key] === "object" &&
+        filteredData[key] !== null &&
+        !Array.isArray(filteredData[key])
+      ) {
+        return (
+          filteredData[key].min <= item[key] &&
+          filteredData[key].max >= item[key]
+        );
       }
       if (Array.isArray(filteredData[key])) {
         if (Array.isArray(item[key])) {
-          return item[key].some(val => filteredData[key].includes(val));
+          return item[key].some((val) => filteredData[key].includes(val));
         }
         return filteredData[key].includes(item[key]);
       }
@@ -24,99 +38,106 @@ function superFilterFunc(filteredData) {
 }
 
 function App() {
-  const [recipes, setRecipes] = useState([]);
+  // const [recipes, setRecipes] = useState([]);
   const [skip, setSkip] = useState(0);
   const [searchText, setSearchText] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
   const [filters, setFilters] = useState({
-    difficulty: '',
-    cookingTime: '',
-    cuisine: '',
-    calories: { min: '', max: '' },
+    difficulty: "",
+    cookingTime: "",
+    cuisine: "",
+    calories: { min: "", max: "" },
     tags: [],
-    mealType: []
+    mealType: [],
   });
-  const totalRecipes = useRef(0);
+
+  const dispatch = useDispatch();
+  const recipes = useSelector(selectRecipes);
+  const totalRecipes = useSelector(selectTotalRecipes);
+  const recipesStatus = useSelector(selectRecipesStatus);
 
   useEffect(() => {
-    setIsLoading(true)
-    fetch(`https://dummyjson.com/recipes?limit=10&skip=${skip}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setRecipes((prev) => [...prev, ...data.recipes])
-        totalRecipes.current = data.total
-      })
-      .finally(() => setIsLoading(false))
-      // destroy | перед вызовом следующей итерации useEffect
-      return () => {}
-  }, [skip])
-  
+    dispatch(fetchRecipes(skip));
+  }, [dispatch, skip]);
+
+  // useEffect(() => {
+  //   // setIsLoading(true);
+  //   fetch(`https://dummyjson.com/recipes?limit=10&skip=${skip}`)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setRecipes((prev) => [...prev, ...data.recipes]);
+  //       // totalRecipes.current = data.total;
+  //     });
+  //   // .finally(() => setIsLoading(false));
+  //   // destroy | перед вызовом следующей итерации useEffect
+  //   return () => {};
+  // }, [skip]);
+
   const skipHandler = () => {
-    if (skip + 10 < totalRecipes.current) {
-      setSkip((prev) => prev + 10)
+    if (skip + 10 < totalRecipes) {
+      setSkip((prev) => prev + 10);
     }
-  }
+  };
 
-   useEffect(() => {
-    let filterObj = {};
-    // difficulty
-    if (filters.difficulty) filterObj.difficulty = filters.difficulty;
-    // cuisine
-    if (filters.cuisine) filterObj.cuisine = filters.cuisine;
-    // calories
-    if (filters.calories.min || filters.calories.max) {
-      filterObj.caloriesPerServing = {
-        min: filters.calories.min ? Number(filters.calories.min) : 0,
-        max: filters.calories.max ? Number(filters.calories.max) : Infinity
-      };
-    }
-    // tags
-    if (filters.tags && filters.tags.length > 0) filterObj.tags = filters.tags;
-    // mealType
-    if (filters.mealType && filters.mealType.length > 0) filterObj.mealType = filters.mealType;
-    // cookingTime 
-    if (filters.cookingTime) {
-      let [min, max] = filters.cookingTime.split('-');
-      min = Number(min);
-      max = Number(max);
-      if (isNaN(max)) max = Infinity;
-      filterObj.totalTime = { min, max };
-    }
+  // useEffect(() => {
+  //   let filterObj = {};
+  //   // difficulty
+  //   if (filters.difficulty) filterObj.difficulty = filters.difficulty;
+  //   // cuisine
+  //   if (filters.cuisine) filterObj.cuisine = filters.cuisine;
+  //   // calories
+  //   if (filters.calories.min || filters.calories.max) {
+  //     filterObj.caloriesPerServing = {
+  //       min: filters.calories.min ? Number(filters.calories.min) : 0,
+  //       max: filters.calories.max ? Number(filters.calories.max) : Infinity,
+  //     };
+  //   }
+  //   // tags
+  //   if (filters.tags && filters.tags.length > 0) filterObj.tags = filters.tags;
+  //   // mealType
+  //   if (filters.mealType && filters.mealType.length > 0)
+  //     filterObj.mealType = filters.mealType;
+  //   // cookingTime
+  //   if (filters.cookingTime) {
+  //     let [min, max] = filters.cookingTime.split("-");
+  //     min = Number(min);
+  //     max = Number(max);
+  //     if (isNaN(max)) max = Infinity;
+  //     filterObj.totalTime = { min, max };
+  //   }
 
-    let result = recipes.map(r => ({ ...r, totalTime: r.prepTimeMinutes + r.cookTimeMinutes }));
+  //   let result = recipes.map((r) => ({
+  //     ...r,
+  //     totalTime: r.prepTimeMinutes + r.cookTimeMinutes,
+  //   }));
 
-    if (searchText) {
-      result = result.filter(recipe =>
-        recipe.name.toLowerCase().includes(searchText.toLowerCase())
-      );
-    }
+  //   if (searchText) {
+  //     result = result.filter((recipe) =>
+  //       recipe.name.toLowerCase().includes(searchText.toLowerCase())
+  //     );
+  //   }
 
-    setFilteredRecipes(result.filter(superFilterFunc(filterObj)));
-  }, [recipes, searchText, filters]);
-
+  //   setFilteredRecipes(result.filter(superFilterFunc(filterObj)));
+  // }, [recipes, searchText, filters]);
 
   return (
     <Theme>
       <Header setSearchText={setSearchText} searchText={searchText} />
       <div className="container">
-       <Filter 
-        onFilterChange={setFilters}
-        currentFilters={filters}
-      />
+        <Filter onFilterChange={setFilters} currentFilters={filters} />
       </div>
       <div className="container">
         <RecepiesList
-          recipes={filteredRecipes}
+          recipes={recipes}
           skipHandler={skipHandler}
           countLoadedRecipes={recipes.length}
-          isLoading={isLoading}
-          totalRecipes={totalRecipes.current}
+          isLoading={recipesStatus}
+          totalRecipes={totalRecipes}
         />
       </div>
     </Theme>
-
-  )
+  );
 }
 
-export default App
+export default App;

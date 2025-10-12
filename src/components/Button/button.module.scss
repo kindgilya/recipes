@@ -8,6 +8,10 @@
     background-color: #1c925b;
   }
 
+  &--error {
+    background-color: rgb(172, 45, 45);
+  }
+
   &--transparent {
     background-color: transparent;
     padding: 0;

@@ -91,8 +91,8 @@ const Recipe = ({
           </Tab>
         </Tabs>
         <div className={cn(styles["recipe__tags-wrapper"])}>
-          {tags.map((el) => {
-            return <ThemedTag key={getRandomId()}>{el}</ThemedTag>;
+          {tags.map((el, i) => {
+            return <ThemedTag key={i}>{el}</ThemedTag>;
           })}
           {/* <Tag text="Pizza"/>
             <Tag text="Italian"/> */}
