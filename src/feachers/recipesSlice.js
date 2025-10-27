@@ -3,7 +3,7 @@ import {
   createSelector,
   createSlice,
 } from "@reduxjs/toolkit";
-import axios from "axios";
+import { getRecipes } from "../api/api";
 
 // type TRecipe = {
 // 	id: number,
@@ -32,10 +32,8 @@ export const fetchRecipes = createAsyncThunk(
   "recipes/fetchRecipes",
   async (skip, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `https://dummyjson.com/recipes?limit=10&skip=${skip}`
-      );
-      return response.data;
+      const recipes = await getRecipes(skip);
+      return recipes;
     } catch (error) {
       return rejectWithValue(error.message);
     }

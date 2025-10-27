@@ -46,7 +46,7 @@ const Recipe = ({
     >
       {isDisabled && (
         <div className={cn(styles["recipe__mark"])}>
-          Рецепт скрыт{" "}
+          Рецепт скрыт
           <Button
             use={"transparent"}
             handler={() => dispatch(toggleDisabledById(id))}
@@ -78,6 +78,7 @@ const Recipe = ({
             <Button
               use={"transparent"}
               handler={() => dispatch(toggleDisabledById(id))}
+              disabled={isFavorite}
             >
               <ImAngry />
             </Button>
