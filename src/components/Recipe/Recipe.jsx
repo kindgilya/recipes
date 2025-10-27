@@ -10,7 +10,14 @@ import { ThemeContext } from "../../context/ThemeContext";
 import ThemedTag from "../ThemedTag/ThemedTag";
 import Button from "../Button/Button";
 import { ImAngry } from "react-icons/im";
-import { FaRegStar } from "react-icons/fa";
+import { GoStar, GoStarFill, GoEye } from "react-icons/go";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectIsRecipeDisabled,
+  selectIsRecipeFavorite,
+  toggleDisabledById,
+  toggleFavoriteById,
+} from "../../feachers/recipesSlice";
 
 const Recipe = ({
   id,
@@ -25,7 +32,9 @@ const Recipe = ({
   const [isActiveIngredientsList, setIsActiveIngredientsList] = useState(false);
   const [isActiveStepsList, setIsActiveStepsList] = useState(false);
   const theme = useContext(ThemeContext);
-
+  const dispatch = useDispatch();
+  const isFavorite = useSelector((state) => selectIsRecipeFavorite(state, id));
+  const isDisabled = useSelector((state) => selectIsRecipeDisabled(state, id));
   const getRandomId = () => Math.random().toString(36).substring(2, 6);
 
   return (
@@ -35,6 +44,17 @@ const Recipe = ({
         theme === "dark" && styles["recipe--dark"]
       )}
     >
+      {isDisabled && (
+        <div className={cn(styles["recipe__mark"])}>
+          Рецепт скрыт{" "}
+          <Button
+            use={"transparent"}
+            handler={() => dispatch(toggleDisabledById(id))}
+          >
+            <GoEye />
+          </Button>
+        </div>
+      )}
       <div className={cn(styles["recipe__img-wrapper"])}>
         <img
           className={cn(styles["recipe__img"])}
@@ -49,10 +69,16 @@ const Recipe = ({
         <div className={cn(styles["recipe__control"])}>
           <h3 className={cn(styles["recipe__title"])}>{name}</h3>
           <div className={cn(styles["recipe__control-btns"])}>
-            <Button use={"transparent"} handler={() => {}}>
-              <FaRegStar />
+            <Button
+              use={"transparent"}
+              handler={() => dispatch(toggleFavoriteById(id))}
+            >
+              {isFavorite ? <GoStarFill /> : <GoStar />}
             </Button>
-            <Button use={"transparent"} handler={() => {}}>
+            <Button
+              use={"transparent"}
+              handler={() => dispatch(toggleDisabledById(id))}
+            >
               <ImAngry />
             </Button>
           </div>

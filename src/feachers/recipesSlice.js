@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 
 // type TRecipe = {
@@ -7,10 +11,22 @@ import axios from "axios";
 // }
 
 // type TInitialState = {
-// 	list: TRecipe[],
+//   list: TRecipe[],
 //   status: string,
 //   error: string,
-// }
+//   total: number,
+//   favoriteIds: number[],
+//   disabledIds: number[],
+// };
+
+// const initialState: TInitialState = {
+//   list: [],
+//   status: "idle",
+//   error: "",
+//   total: 0,
+//   favoriteIds: [],
+//   disabledIds: [],
+// };
 
 export const fetchRecipes = createAsyncThunk(
   "recipes/fetchRecipes",
@@ -33,9 +49,38 @@ const recipesSlice = createSlice({
     status: "idle",
     error: "",
     total: 0,
+    favoriteIds: [],
+    disabledIds: [],
   },
   // sync
-  reducers: {},
+  reducers: {
+    // addFavoriteById(state, action) {
+    //   state.favoriteIds.push(action.payload);
+    // },
+    // removeFavoriteById(state, action) {
+    //   state.favoriteIds = state.favoriteIds.filter(
+    //     (id) => id !== action.payload
+    //   );
+    // },
+    toggleFavoriteById(state, action) {
+      if (state.favoriteIds.includes(action.payload)) {
+        state.favoriteIds = state.favoriteIds.filter(
+          (id) => id !== action.payload
+        );
+      } else {
+        state.favoriteIds.push(action.payload);
+      }
+    },
+    toggleDisabledById(state, action) {
+      if (state.disabledIds.includes(action.payload)) {
+        state.disabledIds = state.disabledIds.filter(
+          (id) => id !== action.payload
+        );
+      } else {
+        state.disabledIds.push(action.payload);
+      }
+    },
+  },
   // async
   extraReducers(builder) {
     builder
@@ -58,6 +103,15 @@ export const selectRecipes = (state) => state.recipes.list;
 export const selectTotalRecipes = (state) => state.recipes.total;
 export const selectRecipesStatus = (state) => state.recipes.status;
 export const selectRecipesError = (state) => state.recipes.error;
+export const selectIsRecipeFavorite = createSelector(
+  [(state) => state, (state, id) => id],
+  (state, id) => state.recipes.favoriteIds.includes(id)
+);
+export const selectIsRecipeDisabled = createSelector(
+  [(state) => state, (state, id) => id],
+  (state, id) => state.recipes.disabledIds.includes(id)
+);
 
 // export default recipesSlice.reducer
 export const { reducer: recipesReducer } = recipesSlice;
+export const { toggleFavoriteById, toggleDisabledById } = recipesSlice.actions;
