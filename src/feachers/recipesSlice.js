@@ -4,6 +4,12 @@ import {
   createSlice,
 } from "@reduxjs/toolkit";
 import { getRecipes } from "../api/api";
+import {
+  getFilterObject,
+  getRecipesWithCalcTotalTime,
+  superFilterFunc,
+} from "../utils";
+import { selectFilter } from "./filterSlice";
 
 // type TRecipe = {
 // 	id: number,
@@ -87,7 +93,10 @@ const recipesSlice = createSlice({
       })
       .addCase(fetchRecipes.fulfilled, (state, action) => {
         state.status = "idle";
-        state.list = [...state.list, ...action.payload.recipes];
+        state.list = [
+          ...state.list,
+          ...getRecipesWithCalcTotalTime(action.payload.recipes),
+        ];
         state.total = action.payload.total;
       })
       .addCase(fetchRecipes.rejected, (state, action) => {
@@ -108,6 +117,12 @@ export const selectIsRecipeFavorite = createSelector(
 export const selectIsRecipeDisabled = createSelector(
   [(state) => state, (state, id) => id],
   (state, id) => state.recipes.disabledIds.includes(id)
+);
+
+export const selectFilteredRecipes = createSelector(
+  [selectRecipes, selectFilter],
+  (recipes, filterData) =>
+    recipes.filter(superFilterFunc(getFilterObject(filterData)))
 );
 
 // export default recipesSlice.reducer
