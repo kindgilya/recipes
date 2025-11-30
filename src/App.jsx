@@ -1,20 +1,23 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
-import RecepiesList from "./components/RecipiesList/RecepiesList";
+// import RecepiesList from "./components/RecipiesList/RecepiesList";
 import Header from "./components/Header/Header";
-import Filter from "./components/Filter/Filter";
+// import Filter from "./components/Filter/Filter";
 import Theme from "./context/ThemeContext";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchRecipes,
-  selectFilteredRecipes,
-  selectRecipesStatus,
-  selectTotalRecipes,
-} from "./feachers/recipesSlice";
+// import { useDispatch, useSelector } from "react-redux";
+// import {
+//   fetchRecipes,
+//   selectFilteredRecipes,
+//   selectRecipesStatus,
+//   selectTotalRecipes,
+// } from "./feachers/recipesSlice";
+import { Route, Routes } from "react-router-dom";
+import HomePage from "./pages/homepage";
+import FavoriteRecipesPage from "./pages/FavoriteRecipesPage";
 
 function App() {
   // const [recipes, setRecipes] = useState([]);
-  const [skip, setSkip] = useState(0);
+  // const [skip, setSkip] = useState(0);
   const [searchText, setSearchText] = useState("");
   // const [isLoading, setIsLoading] = useState(false);
   // const [filteredRecipes, setFilteredRecipes] = useState([]);
@@ -27,14 +30,14 @@ function App() {
   //   mealType: [],
   // });
 
-  const dispatch = useDispatch();
-  const totalRecipes = useSelector(selectTotalRecipes);
-  const recipesStatus = useSelector(selectRecipesStatus);
-  const filteredRecipes = useSelector(selectFilteredRecipes);
+  // const dispatch = useDispatch();
+  // const totalRecipes = useSelector(selectTotalRecipes);
+  // const recipesStatus = useSelector(selectRecipesStatus);
+  // const filteredRecipes = useSelector(selectFilteredRecipes);
 
-  useEffect(() => {
-    dispatch(fetchRecipes(skip));
-  }, [dispatch, skip]);
+  // useEffect(() => {
+  //   dispatch(fetchRecipes(skip));
+  // }, [dispatch, skip]);
 
   // useEffect(() => {
   //   // setIsLoading(true);
@@ -49,11 +52,11 @@ function App() {
   //   return () => {};
   // }, [skip]);
 
-  const skipHandler = () => {
-    if (skip + 10 < totalRecipes) {
-      setSkip((prev) => prev + 10);
-    }
-  };
+  // const skipHandler = () => {
+  //   if (skip + 10 < totalRecipes) {
+  //     setSkip((prev) => prev + 10);
+  //   }
+  // };
 
   // if (searchText) {
   //   result = result.filter((recipe) =>
@@ -64,18 +67,10 @@ function App() {
   return (
     <Theme>
       <Header setSearchText={setSearchText} searchText={searchText} />
-      <div className="container">
-        <Filter />
-      </div>
-      <div className="container">
-        <RecepiesList
-          recipes={filteredRecipes}
-          skipHandler={skipHandler}
-          countLoadedRecipes={totalRecipes}
-          isLoading={recipesStatus}
-          totalRecipes={totalRecipes}
-        />
-      </div>
+      <Routes>
+        <Route path="/" element={<HomePage />}></Route>
+        <Route path="/favorites" element={<FavoriteRecipesPage />}></Route>
+      </Routes>
     </Theme>
   );
 }

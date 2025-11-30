@@ -1,6 +1,11 @@
 export const getFilterObject = (filters) => {
   const filterObj = {};
 
+  // name
+  if (filters.name) {
+    filterObj.name = filters.name;
+  }
+
   // difficulty
   if (filters.difficulty) {
     filterObj.difficulty = filters.difficulty;
@@ -77,6 +82,15 @@ export function superFilterFunc(filteredData) {
         }
         return filteredData[key].includes(item[key]);
       }
+      // if (
+      //   typeof filteredData[key] === "string" &&
+      //   filteredData[key].length > 0 &&
+      //   ["name", "title"].includes(filteredData[key])
+      // ) {
+      //   return filteredData[key]
+      //     .toLowerCase()
+      //     .includes(item[key].toLowerCase());
+      // }
       return filteredData[key] === item[key];
     });
   };

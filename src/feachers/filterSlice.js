@@ -23,6 +23,7 @@ const filterSlice = createSlice({
     calories: { min: "", max: "" },
     tags: [],
     mealType: [],
+    name: "",
   },
   reducers: {
     setFilterProp(state, action) {
@@ -35,3 +36,4 @@ const filterSlice = createSlice({
 export const { reducer: filterReducer } = filterSlice;
 export const selectFilter = (state) => state.filter;
 export const { setFilterProp } = filterSlice.actions;
+export const selectFilterName = (state) => state.filter.name;

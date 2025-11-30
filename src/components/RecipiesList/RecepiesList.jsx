@@ -3,21 +3,37 @@ import Modal from "../Modal/Modal";
 import Recipe from "../Recipe/Recipe";
 import styles from "./recipieslist.module.scss";
 import cn from "classnames";
-import { useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import Button from "../Button/Button";
 import Loader from "../Loader/Loader";
 import { ThemeContext } from "../../context/ThemeContext";
 import RecipeSkeleton from "../RecipeSkeleton/RecipeSkeleton";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchRecipes,
+  selectFilteredRecipes,
+  selectRecipesStatus,
+  selectTotalRecipes,
+} from "../../feachers/recipesSlice";
 
-const RecepiesList = ({
-  recipes,
-  skipHandler,
-  countLoadedRecipes,
-  isLoading,
-  totalRecipes,
-}) => {
+const RecepiesList = () => {
   const [activeModalImage, setActiveModalImage] = useState("");
   const { theme } = useContext(ThemeContext);
+  const [skip, setSkip] = useState(0);
+  const dispatch = useDispatch();
+  const totalRecipes = useSelector(selectTotalRecipes);
+  const recipesStatus = useSelector(selectRecipesStatus);
+  const filteredRecipes = useSelector(selectFilteredRecipes);
+
+  useEffect(() => {
+    dispatch(fetchRecipes(skip));
+  }, [dispatch, skip]);
+
+  const skipHandler = () => {
+    if (skip + 10 < totalRecipes) {
+      setSkip((prev) => prev + 10);
+    }
+  };
 
   const handleImageClick = (img) => {
     setActiveModalImage(img);
@@ -32,8 +48,8 @@ const RecepiesList = ({
   return (
     <div className={cn(styles["recepies-list"])}>
       <div className={cn(styles["recepies-list__main"])}>
-        {recipes.length > 0
-          ? recipes.map((el) => {
+        {filteredRecipes.length > 0
+          ? filteredRecipes.map((el) => {
               return (
                 <Recipe
                   id={el.id}
@@ -56,15 +72,15 @@ const RecepiesList = ({
         <Button
           use={theme === "dark" ? "loaded-dark" : "loaded"}
           handler={skipHandler}
-          disabled={isLoading === "loading"}
+          disabled={recipesStatus === "loading"}
         >
-          {isLoading === "loading" ? (
+          {recipesStatus === "loading" ? (
             <div style={{ display: "flex", gap: "10px" }}>
               load...
               <div style={{ width: "15px", height: "15px" }}>{<Loader />}</div>
             </div>
           ) : (
-            `Loaded (${countLoadedRecipes}), show more`
+            `Loaded (${totalRecipes}), show more`
           )}
         </Button>
       </div>
