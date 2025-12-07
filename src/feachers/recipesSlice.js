@@ -36,10 +36,10 @@ import { selectFilter } from "./filterSlice";
 
 export const fetchRecipes = createAsyncThunk(
   "recipes/fetchRecipes",
-  async (skip, { rejectWithValue }) => {
+  async (page, { rejectWithValue }) => {
     try {
-      const recipes = await getRecipes(skip);
-      return recipes;
+      const serverData = await getRecipes(page);
+      return serverData;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -110,6 +110,7 @@ export const selectRecipes = (state) => state.recipes.list;
 export const selectTotalRecipes = (state) => state.recipes.total;
 export const selectRecipesStatus = (state) => state.recipes.status;
 export const selectRecipesError = (state) => state.recipes.error;
+export const selectLoadedRecipes = (state) => state.recipes.list.length;
 export const selectIsRecipeFavorite = createSelector(
   [(state) => state, (state, id) => id],
   (state, id) => state.recipes.favoriteIds.includes(id)

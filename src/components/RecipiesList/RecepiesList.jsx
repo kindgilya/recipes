@@ -14,26 +14,30 @@ import {
   selectFilteredRecipes,
   selectRecipesStatus,
   selectTotalRecipes,
+  selectLoadedRecipes,
 } from "../../feachers/recipesSlice";
 
 const RecepiesList = () => {
   const [activeModalImage, setActiveModalImage] = useState("");
   const { theme } = useContext(ThemeContext);
-  const [skip, setSkip] = useState(0);
+  const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const totalRecipes = useSelector(selectTotalRecipes);
   const recipesStatus = useSelector(selectRecipesStatus);
   const filteredRecipes = useSelector(selectFilteredRecipes);
+  const loadedRecipes = useSelector(selectLoadedRecipes);
 
   useEffect(() => {
-    dispatch(fetchRecipes(skip));
-  }, [dispatch, skip]);
+    dispatch(fetchRecipes(page));
+  }, [dispatch, page]);
 
-  const skipHandler = () => {
-    if (skip + 10 < totalRecipes) {
-      setSkip((prev) => prev + 10);
+  const pageHandler = () => {
+    if (page * 10 < totalRecipes) {
+      setPage((prev) => prev + 1);
     }
   };
+
+  const isCheckTotal = () => page * 10 < totalRecipes;
 
   const handleImageClick = (img) => {
     setActiveModalImage(img);
@@ -71,8 +75,8 @@ const RecepiesList = () => {
       <div className={cn(styles["recepies-list__btn-show-more"])}>
         <Button
           use={theme === "dark" ? "loaded-dark" : "loaded"}
-          handler={skipHandler}
-          disabled={recipesStatus === "loading"}
+          handler={pageHandler}
+          disabled={recipesStatus === "loading" || !isCheckTotal()}
         >
           {recipesStatus === "loading" ? (
             <div style={{ display: "flex", gap: "10px" }}>
@@ -80,7 +84,9 @@ const RecepiesList = () => {
               <div style={{ width: "15px", height: "15px" }}>{<Loader />}</div>
             </div>
           ) : (
-            `Loaded (${totalRecipes}), show more`
+            `Loaded (${loadedRecipes}), ${
+              isCheckTotal() ? "show more" : "all recipes loaded"
+            } `
           )}
         </Button>
       </div>

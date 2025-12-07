@@ -178,25 +178,25 @@ class MockServer {
    * Возвращает список рецептов с пагинацией и задержкой.
    * @param {Object} options
    * @param {number} [options.limit=10] - Количество рецептов на странице.
-   * @param {number} [options.skip=1] - Номер запрашиваемой страницы (начиная с 1).
+   * @param {number} [options.page=1] - Номер запрашиваемой страницы (начиная с 1).
    * @param {number} [options.delayMs=500] - Задержка в миллисекундах.
-   * @returns {Promise<{recipes: Array, total: number, hasNextSkip: boolean}>}
+   * @returns {Promise<{recipes: Array, total: number, hasNextPage: boolean}>}
    */
-  async getRecipes({ limit = 10, skip = 1, delayMs = 500 } = {}) {
+  async getRecipes({ limit = 10, page = 1, delayMs = 500 } = {}) {
     await this._delay(delayMs);
 
-    const startIndex = (skip - 1) * limit;
+    const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;
 
     const paginatedRecipes = this.recipes.slice(startIndex, endIndex);
     const totalRecipes = this.recipes.length;
-    const hasNextSkip = endIndex < totalRecipes;
+    const hasNextPage = endIndex < totalRecipes;
 
     return {
       limit,
       recipes: paginatedRecipes,
       total: totalRecipes,
-      skip: hasNextSkip,
+      hasNextPage: hasNextPage,
     };
   }
 

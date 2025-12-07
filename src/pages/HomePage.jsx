@@ -9,8 +9,8 @@ import Filter from "../components/Filter/Filter";
 // } from "../feachers/recipesSlice";
 import Header from "../components/Header/Header";
 import { Outlet } from "react-router-dom";
-import mockServer from "../api/fakeServer.js";
-import { useEffect } from "react";
+// import mockServer from "../api/fakeServer.js";
+// import { useEffect } from "react";
 
 const HomePage = () => {
   // const [skip, setSkip] = useState(0);
@@ -29,9 +29,9 @@ const HomePage = () => {
   //   }
   // };
 
-  useEffect(() => {
-    mockServer.getRecipes().then((data) => console.log(data));
-  }, []);
+  // useEffect(() => {
+  //   mockServer.getRecipes().then((data) => console.log(data));
+  // }, []);
 
   return (
     <>
